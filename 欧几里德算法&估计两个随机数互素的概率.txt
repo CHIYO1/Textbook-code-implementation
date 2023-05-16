@@ -1,0 +1,29 @@
+//求两个整数的最大公因数（Gcd）。
+
+
+unsigned int Gcd(unsigned int M, unsigned N) {
+    unsigned int Rem;
+    while (N > 0) {
+        Rem = M % N;
+        M=N;
+        N = Rem;
+    }
+    return M;
+}
+
+//计算随机选取出并小于或对于N的互异正整数互素的概率。
+
+double P(int N) {
+    int rel, tol;
+    rel = 0;
+    tol = 0;
+    for (int i = 0; i <= N; i++) {
+        for (int k = 0; k <= i; k++) {
+            tol++;
+            if (Gcd(i, k) == 1) {
+                rel++;
+            }
+        }
+    }
+    return (double)rel / tol;
+}

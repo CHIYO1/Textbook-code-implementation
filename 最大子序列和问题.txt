@@ -1,0 +1,103 @@
+//给定整数A1,A2,A3....,An(可能有负数)，求子序列的最大值（如果所有整数均为负数，则最大子序列和为0）
+
+①嵌套循环求所有子序列的值后选最大的输出
+
+int Maxsubsequencesum(const int A[], int N)
+{
+    int thissum, maxsum;
+    maxsum = 0;  
+    for (int i = 0; i < N; i++) {
+        thissum = 0;//每次循环重置thissum
+        for (int k = i; k <= N; k++) {
+            thissum += A[k];
+            if (thissum > maxsum) {
+                maxsum = thissum;
+            }
+        }
+    }
+    return maxsum;
+}
+
+
+②递归算法//最大值产生于左半部或右半部或穿插中间
+static int Maxsubsum(const int A[], int left, int right);
+int Max(int A,int B,int C);
+
+static int Maxsubsum(const int A[], int left, int right)
+{
+    int MaxLeftSum, MaxRightSum;
+    int MaxLeftBorderSum, MaxRightBorderSum;
+    int LeftBorderSum, RightBorderSum;
+    int Center, i;
+
+    if (A[left] == A[right])   //只有一个元素的时候，非负即最大和子序列
+    {
+        if (A[left] > 0)
+        {
+            return A[left];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    Center = (left + right) / 2;
+    MaxLeftSum = Maxsubsum(A, left, Center );   //分解问题
+    MaxRightSum = Maxsubsum(A, Center + 1, right);
+
+    MaxLeftBorderSum = 0;
+    MaxRightBorderSum = 0;
+    LeftBorderSum = 0;
+    RightBorderSum = 0;
+
+    for (i = Center; i >= left; i--) {            //循环计算达到分界处的最大和
+        LeftBorderSum += A[i];
+        if (LeftBorderSum > MaxLeftBorderSum) {
+            MaxLeftBorderSum = LeftBorderSum;
+        }
+    }
+
+    for (i = Center + 1; i <= right; i++) {
+        RightBorderSum += A[i];
+        if (RightBorderSum > MaxRightBorderSum) {
+            MaxRightBorderSum = RightBorderSum;
+        }
+    }
+
+    return Max( MaxLeftSum,MaxRightSum ,MaxLeftBorderSum + MaxRightBorderSum );//返回三者中最大者
+}
+
+
+ int Max(int A,int B, int C) {
+    int D[3] = { A,B,C };
+    int i=0;
+    for (int y = 0; y < 3; y++) {
+        if (D[y] > i) {
+            i = D[y];
+        }
+    }
+    return i;
+}
+
+
+
+③//循环依次计算和，大于零时继续算不会减少，到达负数重新从零开始，记录期间达到的最大值
+
+int MaxSubquenceSum(const int A[], int N);
+
+int MaxSubquenceSum(const int A[], int N) {
+    int Maxsum = 0;
+    int Thissum = 0;
+    for (int i = 0; i < N; i++) {
+        Thissum += A[i];
+        if (Thissum > Maxsum) {
+            Maxsum = Thissum;
+        }
+        if (Thissum < 0) {
+            Thissum = 0;
+        }
+    }
+    return Maxsum;
+}
+
+

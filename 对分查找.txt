@@ -1,0 +1,21 @@
+//给定一个整数X和整数A0,A1,A2,A3,....,An-1,后者已经预先排序并在内存中，求使得Ai=X的下标i,如果X不在数据中，则返回i=-1。
+
+
+int BinarySearch(const int A[], int X, int len) {
+    int left, right,Mid;
+    left = 0;
+    right = len - 1;
+    while (left <= right) {
+        Mid = (left + right) / 2;
+        if (A[Mid] < X) {
+            left = Mid+1;
+        }
+        else if (A[Mid] > X) {
+            right = Mid-1;
+        }
+        else {
+            return Mid;
+        }
+    }
+    return 0;
+}
